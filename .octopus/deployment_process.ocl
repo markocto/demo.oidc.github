@@ -1,0 +1,439 @@
+step "sql-server-clusterip" {
+    name = "SQL Server ClusterIP"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: octopetshop-sqlserver-cluster-ip-service
+                spec:
+                  type: ClusterIP
+                  selector:
+                    component: sqlserver
+                  ports:
+                    - port: 1433
+                      targetPort: 1433
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "sql-server-deployment" {
+    name = "SQL Server Deployment"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: sqlserver-deployment
+                spec:
+                  replicas: 1
+                  selector:
+                    matchLabels:
+                      component: sqlserver
+                  template:
+                    metadata:
+                      labels:
+                        component: sqlserver
+                    spec:
+                      containers:
+                        - name: sqlserver
+                          image: mcr.microsoft.com/mssql/server:2019-latest
+                          ports:
+                            - containerPort: 1433
+                          env:
+                            - name: SA_PASSWORD
+                              value: #{Project.SQLServer.SA.Password}
+                            - name: ACCEPT_EULA
+                              value: #{Project.SQLServer.AcceptEula}
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "shopping-cart-clusterip" {
+    name = "Shopping cart ClusterIP"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: octopetshop-shoppingcart-cluster-ip-service
+                spec:
+                  type: ClusterIP
+                  selector:
+                    component: shoppingcartservice
+                  ports:
+                    - port: 5012
+                      targetPort: 5012
+                      name: http-port
+                    - port: 5013
+                      targetPort: 5013
+                      name: https-port
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "shopping-cart-deployment" {
+    name = "Shopping cart Deployment"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: octopetshop-shoppingcartservice-deployment
+                spec:
+                  replicas: 1
+                  selector:
+                    matchLabels:
+                      component: shoppingcart
+                  template:
+                    metadata:
+                      labels:
+                        component: shoppingcart
+                    spec:
+                      containers:
+                        - name: shoppingcart
+                          #image: octopetshop_shoppingcartservice
+                          #imagePullPolicy: Never
+                          image: octopussamples/octopetshop-shoppingcartservice
+                          env:
+                            - name: OPSConnectionString
+                              value: Data Source=octopetshop-sqlserver-cluster-ip-service;Initial Catalog=OctoPetShop; User ID=sa; Password=#{Project.SQLServer.SA.Password}
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "product-service-clusterip" {
+    name = "Product Service ClusterIP"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: octopetshop-productservice-cluster-ip-service
+                spec:
+                  type: ClusterIP
+                  selector:
+                    component: productservice
+                  ports:
+                    - port: 5011
+                      targetPort: 5011
+                      name: http-port
+                    - port: 5014
+                      targetPort: 5014
+                      name: https-port
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "product-service-deployment" {
+    name = "Product service Deployment"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: octopetshop-productservice-deployment
+                spec:
+                  replicas: 1
+                  selector:
+                    matchLabels:
+                      component: productservice
+                  template:
+                    metadata:
+                      labels:
+                        component: productservice
+                    spec:
+                      containers:
+                        - name: productservice
+                          image: octopussamples/octopetshop-productservice
+                          #image: octopetshop_productservice
+                          #imagePullPolicy: Never
+                          env:
+                            - name: OPSConnectionString
+                              value: Data Source=octopetshop-sqlserver-cluster-ip-service;Initial Catalog=OctoPetShop; User ID=sa; Password=#{Project.SQLServer.SA.Password}
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "web-clusterip" {
+    name = "Web ClusterIP"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: octopetshop-web-cluster-ip-service
+                spec:
+                  type: ClusterIP
+                  selector:
+                    component: web
+                  ports:
+                    - port: #{Project.Web.Http.Port}
+                      targetPort: #{Project.Web.Http.Port}
+                      name: http-port
+                    - port: #{Project.Web.Https.Port}
+                      targetPort: #{Project.Web.Https.Port}
+                      name: https-port
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "web-deployment" {
+    name = "Web Deployment"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: octopetshop-web-deployment
+                spec:
+                  replicas: 1
+                  selector:
+                    matchLabels:
+                      component: web
+                  template:
+                    metadata:
+                      labels:
+                        component: web
+                    spec:
+                      containers:
+                        - name: web
+                          image: octopussamples/octopetshop-web
+                          #image: octopetshop_octopetshop # use these when building locally
+                          #imagePullPolicy: Never
+                          ports:
+                            - containerPort: #{Project.Web.Http.Port}
+                              name: http-port
+                            - containerPort: #{Project.Web.Https.Port}
+                              name: https-port
+                          env:
+                            - name: ProductServiceBaseUrl
+                              value: http://octopetshop-productservice-cluster-ip-service:5011/
+                            - name: ShoppingCartServiceBaseUrl
+                              value: http://octopetshop-shoppingcart-cluster-ip-service:5012
+                            - name: ASPNETCORE_URLS
+                              value: "https://+:#{Project.Web.Https.Port};http://+:#{Project.Web.Http.Port}"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "web-loadbalancer" {
+    name = "Web Loadbalancer"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: loadbalancer-web-#{Octopus.Environment.Name | ToLower}
+                spec:
+                  selector:
+                    component: web
+                  ports:
+                    - port: #{Project.Web.Http.Port}
+                      targetPort: #{Project.Web.Http.Port}
+                      name: http-port
+                    - port: #{Project.Web.Https.Port}
+                      targetPort: #{Project.Web.Https.Port}
+                      name: https-port
+                  type: LoadBalancer
+                
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "job-dbup" {
+    name = "Job Dbup"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-azure-cluster"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
+                apiVersion: batch/v1
+                kind: Job
+                metadata:
+                  name: octopetshop-dbup
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - name: dbup
+                          image: octopussamples/octopetshop-database
+                          #image: octopetshop_database
+                          #imagePullPolicy: Never
+                          command: [ "dotnet", "run", "--no-launch-profile" ]
+                          env:
+                            - name: DbUpConnectionString
+                              value: Data Source=octopetshop-sqlserver-cluster-ip-service;Initial Catalog=OctoPetShop; User ID=sa; Password=#{Project.SQLServer.SA.Password}
+                      restartPolicy: Never
+                
+                
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "azure-workers-2019"
+
+        container {
+            feed = "docker-registry"
+            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+        }
+    }
+}
+
+step "slack-send-simple-notification" {
+    condition = "Always"
+    name = "Notify Team of Status (Always Run)"
+
+    action "notify-team-of-status" {
+        properties = {
+            Octopus.Action.Template.Id = "ActionTemplates-83"
+            Octopus.Action.Template.Version = "13"
+            ssn_Channel = "#{Notification.Slack.Channel}"
+            ssn_Color = "good"
+            ssn_HookUrl = "#{Notification.Slack.Url}"
+            ssn_IconUrl = "https://octopus.com/content/resources/favicon.png"
+            ssn_Message = "#{Notification.Deployment.DeepLink}"
+            ssn_Title = "#{Notification.Slack.Deployment.StatusNotification}"
+            ssn_Username = "Octopus Deploy"
+        }
+        worker_pool = "azure-workers-2019"
+    }
+}

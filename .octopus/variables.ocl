@@ -1,0 +1,79 @@
+variable "Octopus.Aws.Regions" {
+    value "ap-southeast-2" {
+        description = ""
+    }
+}
+
+variable "Octopus.Azure.Account" {
+    type = "AzureAccount"
+
+    value "azure-service-principle-account" {
+        description = ""
+    }
+}
+
+variable "Project.Azure.Account" {
+    type = "AzureAccount"
+
+    value "azure-service-principle-account" {}
+}
+
+variable "Project.Azure.Kubernetes.ClusterName" {
+    value "MarkL-K8s-Demo-YAML" {}
+}
+
+variable "Project.Azure.Kubernetes.DnsPrefix" {
+    value "#{Global.Environment.Abbr}-MarkL-K8-dns" {}
+}
+
+variable "Project.Azure.Kubernetes.Version" {
+    value "#{Octopus.Action[Get Kubernetes Version].Output.KubernetesVersion}" {}
+}
+
+variable "Project.Azure.Region.Abbr" {
+    value "eastus2" {}
+}
+
+variable "Project.K8s.VM.Size" {
+    value "Standard_B2ms" {}
+}
+
+variable "Project.SQLServer.AcceptEula" {
+    value "Y" {}
+}
+
+variable "Project.Web.Http.Port" {
+    value "5000" {
+        environment = ["development"]
+    }
+
+    value "5030" {
+        environment = ["production"]
+    }
+
+    value "5020" {
+        environment = ["staging"]
+    }
+
+    value "5010" {
+        environment = ["test"]
+    }
+}
+
+variable "Project.Web.Https.Port" {
+    value "5001" {
+        environment = ["development"]
+    }
+
+    value "5031" {
+        environment = ["production"]
+    }
+
+    value "5021" {
+        environment = ["staging"]
+    }
+
+    value "5011" {
+        environment = ["test"]
+    }
+}
