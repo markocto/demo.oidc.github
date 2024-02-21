@@ -27,7 +27,7 @@ step "sql-server-clusterip" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -74,7 +74,7 @@ step "sql-server-deployment" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -112,7 +112,7 @@ step "shopping-cart-clusterip" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -157,7 +157,7 @@ step "shopping-cart-deployment" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -195,7 +195,7 @@ step "product-service-clusterip" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -240,7 +240,7 @@ step "product-service-deployment" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -278,7 +278,7 @@ step "web-clusterip" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -332,7 +332,7 @@ step "web-deployment" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -371,7 +371,7 @@ step "web-loadbalancer" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
@@ -413,7 +413,7 @@ step "job-dbup" {
 
         container {
             feed = "docker-registry"
-            image = "octopusdeploy/worker-tools:4.0.0-windows.ltsc2019"
+            image = "octopusdeploy/worker-tools:5.2.0-windows.ltsc2019"
         }
     }
 }
