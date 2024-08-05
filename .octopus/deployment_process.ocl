@@ -7,6 +7,8 @@ step "sql-server-clusterip" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: v1
                 kind: Service
@@ -41,6 +43,8 @@ step "sql-server-deployment" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: apps/v1
                 kind: Deployment
@@ -88,6 +92,8 @@ step "shopping-cart-clusterip" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: v1
                 kind: Service
@@ -126,6 +132,8 @@ step "shopping-cart-deployment" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: apps/v1
                 kind: Deployment
@@ -171,6 +179,8 @@ step "product-service-clusterip" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: v1
                 kind: Service
@@ -209,6 +219,8 @@ step "product-service-deployment" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: apps/v1
                 kind: Deployment
@@ -254,6 +266,8 @@ step "web-clusterip" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: v1
                 kind: Service
@@ -292,6 +306,8 @@ step "web-deployment" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: apps/v1
                 kind: Deployment
@@ -346,6 +362,8 @@ step "web-loadbalancer" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: v1
                 kind: Service
@@ -385,6 +403,8 @@ step "job-dbup" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYaml = <<-EOT
                 apiVersion: batch/v1
                 kind: Job
