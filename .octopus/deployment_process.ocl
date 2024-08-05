@@ -25,7 +25,7 @@ step "sql-server-clusterip" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -74,7 +74,7 @@ step "sql-server-deployment" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -114,7 +114,7 @@ step "shopping-cart-clusterip" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -161,7 +161,7 @@ step "shopping-cart-deployment" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -201,7 +201,7 @@ step "product-service-clusterip" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -248,7 +248,7 @@ step "product-service-deployment" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -288,7 +288,7 @@ step "web-clusterip" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -344,7 +344,7 @@ step "web-deployment" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -385,7 +385,7 @@ step "web-loadbalancer" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -429,7 +429,7 @@ step "job-dbup" {
             Octopus.Action.Script.ScriptSource = "Inline"
             OctopusUseBundledTooling = "False"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
 
         container {
             feed = "docker-registry"
@@ -454,6 +454,6 @@ step "slack-send-simple-notification" {
             ssn_Title = "#{Notification.Slack.Deployment.StatusNotification}"
             ssn_Username = "Octopus Deploy"
         }
-        worker_pool = "azure-workers-2019"
+        worker_pool = "azure-worker-pool"
     }
 }
